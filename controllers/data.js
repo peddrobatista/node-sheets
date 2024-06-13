@@ -50,7 +50,7 @@ export const addRow = async (req, res) => {
             range: "Página1",
             valueInputOption: "USER_ENTERED",
             resource: {
-                values: values,
+                values: [values],
             },
         })
 
@@ -67,12 +67,16 @@ export const updateValue = async (req, res) => {
         const {googleSheets, auth, spreadsheetId } = await getAuthSheets();
         const { rowIndex, startColumn, endColumn, values } = req.body;
         
+        const range = `Página1!${startColumn}${rowIndex}:${endColumn}${rowIndex}`;
+        console.log(`Atualizando valores na planilha: ${spreadsheetId}, range: ${range}, valores: ${JSON.stringify(values)}`);
+
         const updateValue = await googleSheets.spreadsheets.values.update({
+            auth,
             spreadsheetId,
-            range: `Página1!${startColumn}${rowIndex}:${endColumn}${rowIndex}`,
+            range: range,
             valueInputOption: "USER_ENTERED",
             resource: {
-                values: values,
+                values: [values],
             },
         });
 
